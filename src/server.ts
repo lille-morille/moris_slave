@@ -2,23 +2,21 @@ import { configDotenv } from "dotenv";
 configDotenv();
 
 import { Client, GatewayIntentBits } from "discord.js";
-import SubjectHelperService from "./services/SubjectHelperService";
+import SubjectHelperService from "./services/subjectHelperService/SubjectHelperService";
 
 import "./deployCommands";
 import {
   ADD_HELPER_SUBJECT_COMMAND,
-  APPLY_FOR_HELPER_COMMAND as BECOME_SLAVE_COMMAND,
+  BECOME_SLAVE_COMMAND,
 } from "./deployCommands";
 
 const TOKEN = process.env.AUTH_TOKEN;
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds] }); //DETTE ER FETTT
 export default client;
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
-
-// YO NICE
 
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isChatInputCommand()) return;

@@ -6,6 +6,7 @@ import {
 } from "discord.js";
 
 import * as yup from "yup";
+import helperSchema from "./helperSchema";
 
 const CATEGORY_CHANNEL_NAME = "Fag Rescue";
 const CATEGORY_CHANNEL_TYPE = 4;
@@ -135,7 +136,7 @@ export default class SubjectHelperService {
     return !channels.length;
   }
 
-  private async getOptions(): Promise<yup.InferType<typeof schema>> {
+  private async getOptions(): Promise<yup.InferType<typeof helperSchema>> {
     const options = this.interaction.options.data;
 
     // Convert interaction options to an object
@@ -146,7 +147,7 @@ export default class SubjectHelperService {
 
     // Validate using yup
     try {
-      const cleanedSchema = await schema.validate(optionsObject);
+      const cleanedSchema = await helperSchema.validate(optionsObject);
       return cleanedSchema;
     } catch (error) {
       await this.interaction.reply({
@@ -157,16 +158,3 @@ export default class SubjectHelperService {
     }
   }
 }
-
-const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/;
-const emojiRegex = /^(?:[^[\s]*)(?:\p{Emoji}[^[\s]*){1}$/u;
-
-const schema = yup.object({
-  name: yup
-    .string()
-    .required()
-    .min(2, "Subject name must be at least 2 characters")
-    .max(15, "Subject name must be at most 15 characters"),
-  color: yup.string().required().matches(hexColorRegex),
-  emoji: yup.string().required().matches(emojiRegex, "Use an emoji character"),
-});

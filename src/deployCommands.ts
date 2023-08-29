@@ -3,7 +3,7 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 
 export const ADD_HELPER_SUBJECT_COMMAND = "add-helper-subject";
-export const APPLY_FOR_HELPER_COMMAND = "become-slave";
+export const BECOME_SLAVE_COMMAND = "become-slave";
 
 const { AUTH_TOKEN, CLIENT_ID } = process.env;
 const commands = [
@@ -29,7 +29,7 @@ const commands = [
         .setRequired(true)
     ),
   new SlashCommandBuilder()
-    .setName(APPLY_FOR_HELPER_COMMAND)
+    .setName(BECOME_SLAVE_COMMAND)
     .setDescription("Become a helper in a subject"),
 ].map((command) => command.toJSON());
 
