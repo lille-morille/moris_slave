@@ -23,12 +23,19 @@ export default class SubjectHelperService {
   public async handleCreateSubject(
     subjectName: string,
     color: ColorResolvable
-  ) {
+  ): Promise<boolean> {
+    // Make sure the subject does not exist
+    if (!this.verifySubjectUniqueness(subjectName)) {
+      return false;
+    }
+
     // Create a channel within the channel category
-    const forum = await this.createSubjectForum(subjectName);
+    await this.createSubjectForum(subjectName);
 
     // Create a role for helpers of this subject
-    const role = await this.createSubjectRole(subjectName, color);
+    await this.createSubjectRole(subjectName, color);
+
+    return true;
   }
 
   /**
