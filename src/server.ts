@@ -21,14 +21,17 @@ client.on("ready", () => {
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
-  if (interaction.commandName === ADD_HELPER_SUBJECT_COMMAND) {
-    new SubjectHelperService(interaction)
-      .handleCreateSubject()
-      .catch(console.error);
-  } else if (interaction.commandName === BECOME_SLAVE_COMMAND) {
-    new SubjectHelperService(interaction)
-      .handleBecomeSlave()
-      .catch(console.error);
+  const subjectHelper = new SubjectHelperService(interaction);
+
+  switch (interaction.commandName) {
+    case ADD_HELPER_SUBJECT_COMMAND:
+      subjectHelper.handleCreateSubject().catch(console.error);
+      break;
+    case BECOME_SLAVE_COMMAND:
+      subjectHelper.handleBecomeSlave().catch(console.error);
+    default:
+      interaction.reply({ content: "Unknown command", ephemeral: true });
+      break;
   }
 });
 
