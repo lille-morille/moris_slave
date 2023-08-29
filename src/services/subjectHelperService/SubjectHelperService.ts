@@ -116,7 +116,83 @@ export default class SubjectHelperService {
         content: `Congrats to ${this.interaction.user.displayName} for becoming a helper in ${selectedRole.subject}!`,
       });
     } catch (err) {
-      throw err;
+      console.error("User action timed out...");
+    }
+  }
+
+  /**
+   * Handles removing a helper role from a user
+   */
+  public async handleRemoveHelper() {
+    const userRoles = this.interaction.member.roles as GuildMemberRoleManager;
+
+    // Fetch all roles from the user
+    const roles = (
+      this.interaction.member.roles as GuildMemberRoleManager
+    ).cache
+      .filter((r) => r.name.endsWith("-helper"))
+      .map((r) => ({ label: r.name, value: r.id }));
+
+    /// Create a select for each role that they can remove
+    const roleSelect = new StringSelectMenuBuilder({
+      custom_id: SELECT_HELPER_ROLES_ID,
+      placeholder: "Select a role to remove",
+      min_values: 0,
+      options: roles,
+      type: ComponentType.StringSelect,
+    });
+
+    // Create an action row holding the select
+    const actionRow = new ActionRowBuilder<SelectMenuBuilder>().addComponents(
+      roleSelect
+    );
+
+    // Reply with option to select
+    const response = await this.interaction.reply({
+      components: [actionRow],
+      ephemeral: true,
+      content: "Please select a role to remove",
+    });
+
+    // Setup a collector filter to listen for the user's selection (avoids other users being able to select on their behalf)
+    const collectorFilter = (i: Interaction) =>
+      i.user.id === this.interaction.user.id;
+
+    try {
+      // Wait for reply
+      const selectedRoles =
+        await response.awaitMessageComponent<SelectMenuType>({
+          filter: collectorFilter,
+          time: 10000,
+        });
+
+      this.interaction.deleteReply();
+
+      const selectedRole = roles.find(
+        (r) => r.value === selectedRoles.values[0]
+      );
+
+      // Add the role to the user
+      // Check that the user does not already have the role
+
+      const hasRole = userRoles.cache.has(selectedRole.value);
+
+      if (hasRole) {
+        await userRoles.remove(selectedRole.value);
+
+        await selectedRoles.reply({
+          content: `You have been removed from the role ${selectedRole.label}! Thanks for your contributions.`,
+          ephemeral: true,
+        });
+      } else {
+        selectedRoles.reply({
+          content: `You don't have the role ${selectedRole.label}! So I won't remove it.`,
+          ephemeral: true,
+        });
+        return;
+      }
+    } catch (err) {
+      console.error("User action timed out...");
     }
   }
 

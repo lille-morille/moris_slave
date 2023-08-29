@@ -2,9 +2,10 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import addHelperSubject from "./addHelperSubject";
 import becomeHelper from "./becomeHelper";
+import removeHelper from "./removeHelper";
 
 const { AUTH_TOKEN, CLIENT_ID } = process.env;
-const commands = [addHelperSubject, becomeHelper].map((command) =>
+const commands = [addHelperSubject, becomeHelper, removeHelper].map((command) =>
   command.toJSON()
 );
 
