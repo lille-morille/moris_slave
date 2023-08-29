@@ -6,23 +6,22 @@ import {
 } from "discord.js";
 
 import * as yup from "yup";
+import {
+  CATEGORY_CHANNEL_NAME,
+  CATEGORY_CHANNEL_TYPE,
+  FORUM_CHANNEL_TYPE,
+} from "../../constants/channels";
 import helperSchema from "./helperSchema";
-
-const CATEGORY_CHANNEL_NAME = "Fag Rescue";
-const CATEGORY_CHANNEL_TYPE = 4;
-const FORUM_CHANNEL_TYPE = 15;
-
-type _Interaction = ChatInputCommandInteraction<CacheType>;
 
 /**
  * Handles creating subjects with roles and channels for helping others
  */
 export default class SubjectHelperService {
   private guild: Guild;
-  private interaction: _Interaction;
+  private interaction: ChatInputCommandInteraction<CacheType>;
   private categoryChannelId: string;
 
-  constructor(interaction: _Interaction) {
+  constructor(interaction: ChatInputCommandInteraction<CacheType>) {
     this.interaction = interaction;
     this.guild = interaction.guild;
   }
@@ -58,7 +57,7 @@ export default class SubjectHelperService {
     const { color, emoji, name } = await this.getOptions();
 
     // Make sure the subject does not exist
-    if (!(await this.verifySubjectUniqueness(name))) {
+    if (!(await this.isSubjectNameUnique(name))) {
       this.interaction.reply({
         content: "Subject already exists!",
         ephemeral: true,
@@ -130,13 +129,14 @@ export default class SubjectHelperService {
    * @param subjectName The name of the subject
    * @returns True if it does not exist, else false
    */
-  private async verifySubjectUniqueness(subjectName: string) {
+  private async isSubjectNameUnique(subjectName: string) {
     // Query all subjects (query channels within the helper category)
     const categoryId = await this.getCategoryId();
 
     // Find all channels within the category
     const channels = this.guild.channels.cache.filter(
-      (c) => c.parentId === categoryId
+      (c) =>
+        c.parentId === categoryId && c.name.includes(subjectName.toLowerCase())
     ).values;
     return !channels.length;
   }
