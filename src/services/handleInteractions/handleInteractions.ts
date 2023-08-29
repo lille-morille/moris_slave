@@ -2,6 +2,7 @@ import { CacheType, Interaction } from "discord.js";
 import {
   ADD_HELPER_SUBJECT_COMMAND,
   BECOME_SLAVE_COMMAND,
+  REMOVE_HELPER_COMMAND,
 } from "../../constants/commands";
 import SubjectHelperService from "../subjectHelperService/SubjectHelperService";
 
@@ -13,16 +14,16 @@ export default async function (interaction: Interaction<CacheType>) {
 
   console.log(interaction.commandName);
 
+  const helperService = new SubjectHelperService(interaction);
   switch (interaction.commandName) {
     case ADD_HELPER_SUBJECT_COMMAND:
-      new SubjectHelperService(interaction)
-        .handleCreateSubject()
-        .catch(console.error);
+      helperService.handleCreateSubject();
       break;
     case BECOME_SLAVE_COMMAND:
-      new SubjectHelperService(interaction)
-        .handleBecomeHelper()
-        .catch(console.error);
+      helperService.handleBecomeHelper();
+      break;
+    case REMOVE_HELPER_COMMAND:
+      helperService.handleRemoveHelper();
       break;
     default:
       interaction.reply({ content: "Unknown command", ephemeral: true });
