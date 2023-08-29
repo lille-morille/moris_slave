@@ -19,13 +19,13 @@ const commands = [
     .addStringOption((option) =>
       option
         .setName("color")
-        .setDescription("The color of the subject in HEX format")
+        .setDescription("The color of the subject in HEX format ex. #A0CD3F")
         .setRequired(true)
     )
     .addStringOption((option) =>
       option
         .setName("emoji")
-        .setDescription("A cute emoji for the subject")
+        .setDescription("A descriptive emoji for the subject")
         .setRequired(true)
     ),
   new SlashCommandBuilder()
