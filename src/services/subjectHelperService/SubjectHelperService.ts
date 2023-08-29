@@ -1,28 +1,34 @@
 import {
-  CacheType,
+  ActionRowBuilder,
   ChatInputCommandInteraction,
   ColorResolvable,
+  ComponentType,
   Guild,
+  GuildMemberRoleManager,
+  Interaction,
+  SelectMenuType,
+  StringSelectMenuBuilder,
 } from "discord.js";
 
+import { SelectMenuBuilder } from "@discordjs/builders";
 import * as yup from "yup";
+import {
+  CATEGORY_CHANNEL_NAME,
+  CATEGORY_CHANNEL_TYPE,
+  FORUM_CHANNEL_TYPE,
+} from "../../constants/channels";
+import { SELECT_HELPER_ROLES_ID } from "../../constants/inputIds";
 import helperSchema from "./helperSchema";
-
-const CATEGORY_CHANNEL_NAME = "Fag Rescue";
-const CATEGORY_CHANNEL_TYPE = 4;
-const FORUM_CHANNEL_TYPE = 15;
-
-type _Interaction = ChatInputCommandInteraction<CacheType>;
 
 /**
  * Handles creating subjects with roles and channels for helping others
  */
 export default class SubjectHelperService {
   private guild: Guild;
-  private interaction: _Interaction;
+  private interaction: ChatInputCommandInteraction;
   private categoryChannelId: string;
 
-  constructor(interaction: _Interaction) {
+  constructor(interaction: ChatInputCommandInteraction) {
     this.interaction = interaction;
     this.guild = interaction.guild;
   }
@@ -30,22 +36,88 @@ export default class SubjectHelperService {
   /**
    * Allows a user to select which helper roles they want
    */
-  public async handleBecomeSlave() {
-    /*     const modal = new ModalBuilder()
-      .setCustomId("slave_modal")
-      .setTitle("Select subject(s)");
+  public async handleBecomeHelper() {
+    // Fetch all helper roles
+    const helperRoles = this.guild.roles.cache
+      .filter((r) => r.name.endsWith("-helper"))
+      .map((r) => ({
+        id: r.id,
+        role: r.name,
+        subject:
+          r.name[0].toUpperCase() + r.name.slice(1).replace("-helper", ""),
+      }));
 
-    // Create confirmation and cancel buttons
-    const confirmButton = new ButtonBuilder()
-      .setCustomId("confirmButton")
-      .setLabel("Confirm")
-      .setStyle(1);
+    // Create a select for each subject
+    const subjectSelect = new StringSelectMenuBuilder({
+      custom_id: SELECT_HELPER_ROLES_ID,
+      placeholder: "Select a subject to become a helper",
+      min_values: 0,
+      options: helperRoles.map((r) => ({
+        label: r.subject,
+        value: r.id,
+      })),
+      type: ComponentType.StringSelect,
+    });
 
-    // Reply with the modal content
-    await this.interaction.reply({
-      content: "Please select an option:",
-      components: [confirmButton],
-    }); */
+    // Create an action row holding the select
+    const actionRow = new ActionRowBuilder<SelectMenuBuilder>().addComponents(
+      subjectSelect
+    );
+
+    // Reply with option to select
+    const response = await this.interaction.reply({
+      components: [actionRow],
+      ephemeral: true,
+      content: "Please select one or more subjects",
+    });
+
+    // Setup a collector filter to listen for the user's selection
+    const collectorFilter = (i: Interaction) =>
+      i.user.id === this.interaction.user.id;
+
+    try {
+      // Wait for reply
+      const selectedSubjects =
+        await response.awaitMessageComponent<SelectMenuType>({
+          filter: collectorFilter,
+          time: 10000,
+        });
+
+      this.interaction.deleteReply();
+
+      const selectedRole = helperRoles.find(
+        (r) => r.id === selectedSubjects.values[0]
+      );
+
+      // Add the role to the user
+      // Check that the user does not already have the role
+      if (
+        (this.interaction.member.roles as GuildMemberRoleManager).cache.has(
+          selectedRole.id
+        )
+      ) {
+        selectedSubjects.reply({
+          content: `You already have the role ${selectedRole.role}! So I won't add it again.`,
+          ephemeral: true,
+        });
+        return;
+      } else {
+        await (this.interaction.member.roles as GuildMemberRoleManager).add(
+          selectedRole.id
+        );
+      }
+
+      await selectedSubjects.reply({
+        content: `Congrats on becoming a helper in ${selectedRole.subject}! Thanks for helping out the community <3.\nYou have been promoted to ${selectedRole.role} and will be pinged whenever someone posts in the ${selectedRole.subject} forum channel.`,
+        ephemeral: true,
+      });
+
+      await selectedSubjects.followUp({
+        content: `Congrats to ${this.interaction.user.displayName} for becoming a helper in ${selectedRole.subject}!`,
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -58,7 +130,7 @@ export default class SubjectHelperService {
     const { color, emoji, name } = await this.getOptions();
 
     // Make sure the subject does not exist
-    if (!(await this.verifySubjectUniqueness(name))) {
+    if (!(await this.isSubjectNameUnique(name))) {
       this.interaction.reply({
         content: "Subject already exists!",
         ephemeral: true,
@@ -130,13 +202,14 @@ export default class SubjectHelperService {
    * @param subjectName The name of the subject
    * @returns True if it does not exist, else false
    */
-  private async verifySubjectUniqueness(subjectName: string) {
+  private async isSubjectNameUnique(subjectName: string) {
     // Query all subjects (query channels within the helper category)
     const categoryId = await this.getCategoryId();
 
     // Find all channels within the category
     const channels = this.guild.channels.cache.filter(
-      (c) => c.parentId === categoryId
+      (c) =>
+        c.parentId === categoryId && c.name.includes(subjectName.toLowerCase())
     ).values;
     return !channels.length;
   }
