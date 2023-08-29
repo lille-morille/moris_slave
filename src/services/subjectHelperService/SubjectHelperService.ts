@@ -59,6 +59,11 @@ export default class SubjectHelperService {
 
     // Make sure the subject does not exist
     if (!(await this.verifySubjectUniqueness(name))) {
+      this.interaction.reply({
+        content: "Subject already exists!",
+        ephemeral: true,
+      });
+      throw new Error("Subject already exists!");
     }
 
     // Create a channel within the channel category
