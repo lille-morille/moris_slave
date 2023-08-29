@@ -2,14 +2,15 @@
   "name": "moris_slave",
   "version": "1.0.0",
   "description": "Mori's slave",
-  "main": "dist/server.js",
+  "main": "src/server.ts",
   "author": "Anders Morille",
   "license": "None",
   "private": true,
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts"
+    "dev": "nodemon src/server.ts",
+    "deployCommands": "nodemon src/deployCommands.ts"
   },
   "dependencies": {
     "@discordjs/builders": "^1.6.5",
