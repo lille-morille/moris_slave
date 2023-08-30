@@ -7,7 +7,7 @@ import handleInteractionCreate from "./services/eventHandlers/handleInteractionC
 import handleThreadCreate from "./services/eventHandlers/handleThreadCreate";
 
 const TOKEN = process.env.AUTH_TOKEN;
-const client = new Client({ intents: [GatewayIntentBits.Guilds] }); //DETTE ER FETTT
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 export default client;
 
 client.on("ready", () => console.log(`Logged in as ${client.user.tag}!`));
