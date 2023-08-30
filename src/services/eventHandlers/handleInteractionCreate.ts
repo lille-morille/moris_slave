@@ -29,7 +29,7 @@ export default async function (interaction: Interaction<CacheType>) {
       helperService.handleSolved();
       break;
     case WHIP_SLAVES_COMMAND:
-      helperService.whipSlaves();
+      helperService.handleWhipSlaves();
       break;
     default:
       interaction.reply({ content: "Unknown command", ephemeral: true });

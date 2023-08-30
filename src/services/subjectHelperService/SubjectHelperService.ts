@@ -335,7 +335,7 @@ export default class SubjectHelperService {
       });
     }
   }
-  public async whipSlaves() {
+  public async handleWhipSlaves() {
     const thread = this.interaction.channel;
     const channelName = thread.parent.name;
     const subject = channelName.slice(3);
@@ -353,7 +353,7 @@ export default class SubjectHelperService {
       });
     } else {
       this.interaction.reply({
-        content: "❗️ Please don't whip the slaves outside of threads ❗️",
+        content: "Please don't whip the slaves outside of threads",
       });
     }
   }
