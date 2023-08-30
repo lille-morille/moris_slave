@@ -12,8 +12,6 @@ import SubjectHelperService from "../subjectHelperService/SubjectHelperService";
 export default async function (interaction: Interaction<CacheType>) {
   if (!interaction.isChatInputCommand()) return;
 
-  console.log(interaction.commandName);
-
   const helperService = new SubjectHelperService(interaction);
   switch (interaction.commandName) {
     case ADD_HELPER_SUBJECT_COMMAND:

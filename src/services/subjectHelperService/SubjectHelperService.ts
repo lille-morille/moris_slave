@@ -116,7 +116,7 @@ export default class SubjectHelperService {
         content: `Congrats to ${this.interaction.user.displayName} for becoming a helper in ${selectedRole.subject}!`,
       });
     } catch (err) {
-      console.error("User action timed out...");
+      console.error(err);
     }
   }
 
@@ -192,7 +192,6 @@ export default class SubjectHelperService {
         return;
       }
     } catch (err) {
-      console.error("User action timed out...");
     }
   }
 

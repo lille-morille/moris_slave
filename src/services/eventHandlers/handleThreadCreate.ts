@@ -32,5 +32,4 @@ export default function handleThreadCreate(
   thread.send(
     `Hey, everyone with <@&${role.id}>, help is needed in this thread!`
   );
-  console.log("Added a thread to a helper channel");
 }
