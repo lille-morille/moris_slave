@@ -7,7 +7,7 @@ import {
   SOLVED_COMMAND
 } from "../../constants/commands";
 import SubjectHelperService from "../subjectHelperService/SubjectHelperService";
-import MemeService from "../entertainmentService/MemeService";
+import MemeService from "../entertainmentService/MemeService.ts";
 
 /**
  * Handles all incoming command interactions (slash commands) from users
