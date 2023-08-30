@@ -1,5 +1,6 @@
 import {
   ActionRowBuilder,
+  ChannelType,
   ChatInputCommandInteraction,
   ColorResolvable,
   ComponentType,
@@ -9,6 +10,7 @@ import {
   SelectMenuType,
   StringSelectMenuBuilder,
 } from "discord.js";
+import { CATEGORY_CHANNEL_NAME as HELPER_CATEGORY_CHANNEL_NAME } from "../../constants/channels";
 
 import { SelectMenuBuilder } from "@discordjs/builders";
 import * as yup from "yup";
@@ -317,5 +319,18 @@ export default class SubjectHelperService {
       throw error;
     }
   }
-  public async handleSolved() {}
+  public async handleSolved() {
+    const thread = this.interaction.channel;
+    if (
+      thread.type == ChannelType.PublicThread &&
+      thread.parent.type == ChannelType.GuildForum &&
+      thread.parent.parent.name == HELPER_CATEGORY_CHANNEL_NAME &&
+      thread.name[0] != "✅"
+    ) {
+      thread.setName("✅ " + thread.name);
+      this.interaction.reply({ content: "This thread is now solved!" });
+    } else {
+      // This command only works in threads
+    }
+  }
 }
