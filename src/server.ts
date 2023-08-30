@@ -6,7 +6,6 @@ import "./services/commands/deployCommands";
 import handleInteractionCreate from "./services/eventHandlers/handleInteractionCreate";
 import handleThreadCreate from "./services/eventHandlers/handleThreadCreate";
 
-const TOKEN = process.env.AUTH_TOKEN;
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 export default client;
 
@@ -14,4 +13,4 @@ client.on("ready", () => console.log(`Logged in as ${client.user.tag}!`));
 client.on("interactionCreate", handleInteractionCreate);
 client.on("threadCreate", handleThreadCreate);
 
-client.login(TOKEN);
+client.login(process.env.AUTH_TOKEN);
