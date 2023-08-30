@@ -192,6 +192,13 @@ export default class SubjectHelperService {
         return;
       }
     } catch (err) {
+      console.error(err);
+      await this.interaction.deleteReply();
+      if (!this.interaction.replied) {
+        this.interaction.reply({
+          content: `Something went wrong, here is the error message: ${err.message}`,
+        });
+      }
     }
   }
 
