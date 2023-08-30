@@ -33,7 +33,10 @@ export default async function (interaction: Interaction) {
       new MemeService(interaction).getMeme();
       break;
     default:
-      interaction.reply({ content: "Unknown command", ephemeral: true });
+      await interaction.reply({
+        content: "Error: Unknown command",
+        ephemeral: true,
+      });
       break;
   }
 }

@@ -1,25 +1,25 @@
-import { CommandInteraction } from "discord.js";
-import {ResponseBody} from "./types";
+import { ChatInputCommandInteraction } from "discord.js";
+import { ResponseBody } from "./types";
 
 export default class MemeService {
-  private interaction: CommandInteraction;
+  private interaction: ChatInputCommandInteraction;
 
-  constructor(interaction: CommandInteraction) {
+  constructor(interaction: ChatInputCommandInteraction) {
     this.interaction = interaction;
   }
 
   public async getMeme() {
-
-    this.interaction.deferReply();
+    await this.interaction.deferReply();
 
     const response = await fetch("https://meme-api.com/gimme");
 
     if (response.status === 200) {
-      
-      const body: ResponseBody = await response.json()
-      this.interaction.reply({ content: body["url"], ephemeral: false });
+      const body: ResponseBody = await response.json();
+      await this.interaction.editReply({ content: body.url });
+    } else {
+      await this.interaction.editReply({
+        content: "Something went wrong, try again later",
+      });
     }
-
-    // this.interaction.reply({ content: "Here is a meme!", ephemeral: false });
   }
 }
