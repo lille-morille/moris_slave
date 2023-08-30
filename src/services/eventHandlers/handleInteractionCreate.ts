@@ -33,7 +33,6 @@ export default async function (interaction: Interaction) {
     case MEME_COMMAND:
       new MemeService(interaction).getMeme();
       break;
-      break;
     case WHIP_SLAVES_COMMAND:
       helperService.handleWhipSlaves();
       break;
