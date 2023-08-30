@@ -8,6 +8,7 @@ export default class MemeService {
   }
 
   public async getMeme() {
+    
     this.interaction.reply({ content: "Here is a meme!", ephemeral: false });
   }
 }
