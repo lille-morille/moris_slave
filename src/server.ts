@@ -2,7 +2,7 @@ import { configDotenv } from "dotenv";
 configDotenv();
 
 import { Client, GatewayIntentBits } from "discord.js";
-import "./services/commands/deployCommands";
+import "./services/chatCommands/deployCommands";
 import handleInteractionCreate from "./services/eventHandlers/handleInteractionCreate";
 import handleThreadCreate from "./services/eventHandlers/handleThreadCreate";
 

@@ -10,28 +10,28 @@ import {
   SelectMenuType,
   StringSelectMenuBuilder,
 } from "discord.js";
-import { CATEGORY_CHANNEL_NAME as HELPER_CATEGORY_CHANNEL_NAME } from "../../constants/channels";
+import { HELPER_CHANNEL_CATEGORY_NAME as HELPER_CATEGORY_CHANNEL_NAME } from "../../../constants/channels";
 
 import { SelectMenuBuilder } from "@discordjs/builders";
 import * as yup from "yup";
 import {
-  CATEGORY_CHANNEL_NAME,
   CATEGORY_CHANNEL_TYPE,
   FORUM_CHANNEL_TYPE,
-} from "../../constants/channels";
-import { SELECT_HELPER_ROLES_ID } from "../../constants/inputIds";
+  HELPER_CHANNEL_CATEGORY_NAME,
+} from "../../../constants/channels";
+import { SELECT_HELPER_ROLES_ID } from "../../../constants/inputIds";
+import InteractionService from "../InteractionService";
 import helperSchema from "./helperSchema";
 
 /**
  * Handles creating subjects with roles and channels for helping others
  */
-export default class SubjectHelperService {
+export default class SubjectHelperService extends InteractionService {
   private guild: Guild;
-  private interaction: ChatInputCommandInteraction;
   private categoryChannelId: string;
 
   constructor(interaction: ChatInputCommandInteraction) {
-    this.interaction = interaction;
+    super(interaction);
     this.guild = interaction.guild;
   }
 
@@ -242,13 +242,14 @@ export default class SubjectHelperService {
 
     const category = this.guild.channels.cache.find(
       (c) =>
-        c.type === CATEGORY_CHANNEL_TYPE && c.name === CATEGORY_CHANNEL_NAME
+        c.type === CATEGORY_CHANNEL_TYPE &&
+        c.name === HELPER_CHANNEL_CATEGORY_NAME
     );
 
     // If it does not exist, create it
     if (!category) {
       const newCategory = await this.guild.channels.create({
-        name: CATEGORY_CHANNEL_NAME,
+        name: HELPER_CHANNEL_CATEGORY_NAME,
         type: CATEGORY_CHANNEL_TYPE,
       });
       this.categoryChannelId = newCategory.id;
@@ -335,30 +336,6 @@ export default class SubjectHelperService {
     } else {
       this.interaction.editReply({
         content: "❗️ This command only works in threads ❗️",
-      });
-    }
-  }
-  public async handleWhipSlaves() {
-    await this.interaction.deferReply();
-
-    const thread = this.interaction.channel;
-    const channelName = thread.parent.name;
-    const subject = channelName.slice(3);
-    const roleName = subject + "-helper";
-    const role = thread.guild.roles.cache.find(
-      (role) => role.name === roleName
-    );
-    if (
-      thread.type == ChannelType.PublicThread &&
-      thread.parent.type == ChannelType.GuildForum &&
-      thread.parent.parent.name == HELPER_CATEGORY_CHANNEL_NAME
-    ) {
-      this.interaction.editReply({
-        content: `<@&${role.id}>, get to work! 𓀓𓀝`,
-      });
-    } else {
-      this.interaction.editReply({
-        content: "Please don't whip the slaves outside of threads",
       });
     }
   }

@@ -1,30 +1,12 @@
-import { AnyThreadChannel, ChannelType } from "discord.js";
-import { CATEGORY_CHANNEL_NAME as HELPER_CATEGORY_CHANNEL_NAME } from "../../constants/channels";
+import { AnyThreadChannel } from "discord.js";
+import isHelperThread from "../../utils/isHelperThread";
+import threadToHelperRoleId from "../../utils/threadToHelperRole";
 
-export default function handleThreadCreate(
-  thread: AnyThreadChannel<boolean>,
-  newlyCreated: boolean
-) {
-  if (
-    thread.type != ChannelType.PublicThread ||
-    !newlyCreated ||
-    thread.parent.type !== ChannelType.GuildForum ||
-    thread.parent.parent.name !== HELPER_CATEGORY_CHANNEL_NAME
-  )
-    return;
+export default function handleThreadCreate(thread: AnyThreadChannel) {
+  // Make sure that we are in a helper thread
+  if (!isHelperThread) return;
 
-  // Get the name of the thread channel
-  const channelName = thread.parent.name;
-
-  // Grab the name after the emoji aka. from the third character as each
-  // channel starts with an emoji and a hyphen
-  // Example: 📚-matematikk, btw this is safe since we validate
-  // that exacly one emoji is used and the hyphen is standard
-  const subject = channelName.slice(3);
-
-  const roleName = subject + "-helper";
-
-  const role = thread.guild.roles.cache.find((role) => role.name === roleName);
+  const role = threadToHelperRoleId(thread);
 
   if (!role) return;
 
