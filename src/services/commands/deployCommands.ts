@@ -4,9 +4,10 @@ import addHelperSubject from "./addHelperSubject";
 import becomeHelper from "./becomeHelper";
 import removeHelper from "./removeHelper";
 import solved from "./solved";
+import meme from "./meme";
 
 const { AUTH_TOKEN, CLIENT_ID } = process.env;
-const commands = [addHelperSubject, becomeHelper, removeHelper, solved].map(
+const commands = [addHelperSubject, becomeHelper, removeHelper, solved, meme].map(
   (command) => command.toJSON()
 );
 
