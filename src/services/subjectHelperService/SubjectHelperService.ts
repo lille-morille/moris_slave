@@ -329,15 +329,18 @@ export default class SubjectHelperService {
       thread.name[0] != "✅"
     ) {
       thread.setName("✅ " + thread.name);
-      this.interaction.reply({ content: "✅ This thread is now solved ✅" });
+      this.interaction.editReply({
+        content: "✅ This thread is now solved ✅",
+      });
     } else {
-      this.interaction.reply({
+      this.interaction.editReply({
         content: "❗️ This command only works in threads ❗️",
       });
     }
   }
   public async handleWhipSlaves() {
-    this.interaction.deferReply();
+    await this.interaction.deferReply();
+
     const thread = this.interaction.channel;
     const channelName = thread.parent.name;
     const subject = channelName.slice(3);
@@ -350,11 +353,11 @@ export default class SubjectHelperService {
       thread.parent.type == ChannelType.GuildForum &&
       thread.parent.parent.name == HELPER_CATEGORY_CHANNEL_NAME
     ) {
-      this.interaction.reply({
+      this.interaction.editReply({
         content: `<@&${role.id}>, get to work! 𓀓𓀝`,
       });
     } else {
-      this.interaction.reply({
+      this.interaction.editReply({
         content: "Please don't whip the slaves outside of threads",
       });
     }
