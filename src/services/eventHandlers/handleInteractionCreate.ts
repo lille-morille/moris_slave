@@ -26,6 +26,7 @@ export default async function (interaction: Interaction<CacheType>) {
       break;
     case SOLVED_COMMAND:
       helperService.handleSolved();
+      break;
     default:
       interaction.reply({ content: "Unknown command", ephemeral: true });
       break;

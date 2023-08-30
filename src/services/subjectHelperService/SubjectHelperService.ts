@@ -330,7 +330,9 @@ export default class SubjectHelperService {
       thread.setName("✅ " + thread.name);
       this.interaction.reply({ content: "This thread is now solved!" });
     } else {
-      // This command only works in threads
+      this.interaction.reply({
+        content: "❗️ This command only works in threads ❗️",
+      });
     }
   }
 }
