@@ -3,10 +3,11 @@ import { Routes } from "discord-api-types/v9";
 import addHelperSubject from "./addHelperSubject";
 import becomeHelper from "./becomeHelper";
 import removeHelper from "./removeHelper";
+import solved from "./solved";
 
 const { AUTH_TOKEN, CLIENT_ID } = process.env;
-const commands = [addHelperSubject, becomeHelper, removeHelper].map((command) =>
-  command.toJSON()
+const commands = [addHelperSubject, becomeHelper, removeHelper, solved].map(
+  (command) => command.toJSON()
 );
 
 const rest = new REST({ version: "10" }).setToken(AUTH_TOKEN);
