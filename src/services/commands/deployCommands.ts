@@ -4,11 +4,16 @@ import addHelperSubject from "./addHelperSubject";
 import becomeHelper from "./becomeHelper";
 import removeHelper from "./removeHelper";
 import solved from "./solved";
+import whipSlaves from "./whipSlaves";
 
 const { AUTH_TOKEN, CLIENT_ID } = process.env;
-const commands = [addHelperSubject, becomeHelper, removeHelper, solved].map(
-  (command) => command.toJSON()
-);
+const commands = [
+  addHelperSubject,
+  becomeHelper,
+  removeHelper,
+  solved,
+  whipSlaves,
+].map((command) => command.toJSON());
 
 const rest = new REST({ version: "10" }).setToken(AUTH_TOKEN);
 
