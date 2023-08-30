@@ -7,8 +7,9 @@ import {
   SOLVED_COMMAND,
   WHIP_SLAVES_COMMAND,
 } from "../../constants/commands";
-import MemeService from "../entertainmentService/MemeService";
-import SubjectHelperService from "../subjectHelperService/SubjectHelperService";
+import MemeService from "../interactionServices/entertainment/memeService/MemeService";
+import SlaveWhipperService from "../interactionServices/slaveWhipperService/SlaveWhipperService";
+import SubjectHelperService from "../interactionServices/subjectHelperService/SubjectHelperService";
 
 /**
  * Handles all incoming command interactions (slash commands) from users
@@ -34,7 +35,7 @@ export default async function (interaction: Interaction) {
       new MemeService(interaction).getMeme();
       break;
     case WHIP_SLAVES_COMMAND:
-      helperService.handleWhipSlaves();
+      new SlaveWhipperService(interaction).handleWhipSlaves();
       break;
     default:
       await interaction.reply({

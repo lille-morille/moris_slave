@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { ADD_HELPER_SUBJECT_COMMAND } from "../../constants/commands";
+import { ADD_HELPER_SUBJECT_COMMAND } from "../../../constants/commands";
 
 export default new SlashCommandBuilder()
   .setName(ADD_HELPER_SUBJECT_COMMAND)

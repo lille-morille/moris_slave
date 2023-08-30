@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { SOLVED_COMMAND } from "../../constants/commands";
+import { SOLVED_COMMAND } from "../../../constants/commands";
 
 export default new SlashCommandBuilder()
   .setName(SOLVED_COMMAND)
