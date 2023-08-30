@@ -337,12 +337,20 @@ export default class SubjectHelperService {
   }
   public async whipSlaves() {
     const thread = this.interaction.channel;
+    const channelName = thread.parent.name;
+    const subject = channelName.slice(3);
+    const roleName = subject + "-helper";
+    const role = thread.guild.roles.cache.find(
+      (role) => role.name === roleName
+    );
     if (
       thread.type == ChannelType.PublicThread &&
       thread.parent.type == ChannelType.GuildForum &&
       thread.parent.parent.name == HELPER_CATEGORY_CHANNEL_NAME
     ) {
-      this.interaction.reply({ content: "GET TO WORK SLAVES!" });
+      this.interaction.reply({
+        content: `<@&${role.id}>, get to work! 𓀓𓀝`,
+      });
     } else {
       this.interaction.reply({
         content: "❗️ Please don't whip the slaves outside of threads ❗️",
