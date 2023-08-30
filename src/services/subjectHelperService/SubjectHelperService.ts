@@ -335,4 +335,18 @@ export default class SubjectHelperService {
       });
     }
   }
+  public async whipSlaves() {
+    const thread = this.interaction.channel;
+    if (
+      thread.type == ChannelType.PublicThread &&
+      thread.parent.type == ChannelType.GuildForum &&
+      thread.parent.parent.name == HELPER_CATEGORY_CHANNEL_NAME
+    ) {
+      this.interaction.reply({ content: "GET TO WORK SLAVES!" });
+    } else {
+      this.interaction.reply({
+        content: "❗️ Please don't whip the slaves outside of threads ❗️",
+      });
+    }
+  }
 }

@@ -4,6 +4,7 @@ import {
   BECOME_HELPER_COMMAND,
   REMOVE_HELPER_COMMAND,
   SOLVED_COMMAND,
+  WHIP_SLAVES_COMMAND,
 } from "../../constants/commands";
 import SubjectHelperService from "../subjectHelperService/SubjectHelperService";
 
@@ -26,6 +27,9 @@ export default async function (interaction: Interaction<CacheType>) {
       break;
     case SOLVED_COMMAND:
       helperService.handleSolved();
+      break;
+    case WHIP_SLAVES_COMMAND:
+      helperService.whipSlaves();
       break;
     default:
       interaction.reply({ content: "Unknown command", ephemeral: true });
