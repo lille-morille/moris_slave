@@ -5,6 +5,7 @@ import {
   MEME_COMMAND,
   REMOVE_HELPER_COMMAND,
   SOLVED_COMMAND,
+  WHIP_SLAVES_COMMAND,
 } from "../../constants/commands";
 import MemeService from "../entertainmentService/MemeService";
 import SubjectHelperService from "../subjectHelperService/SubjectHelperService";
@@ -31,6 +32,9 @@ export default async function (interaction: Interaction) {
       break;
     case MEME_COMMAND:
       new MemeService(interaction).getMeme();
+      break;
+    case WHIP_SLAVES_COMMAND:
+      helperService.handleWhipSlaves();
       break;
     default:
       await interaction.reply({

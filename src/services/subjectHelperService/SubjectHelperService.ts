@@ -320,6 +320,7 @@ export default class SubjectHelperService {
     }
   }
   public async handleSolved() {
+    this.interaction.deferReply();
     const thread = this.interaction.channel;
     if (
       thread.type == ChannelType.PublicThread &&
@@ -328,9 +329,37 @@ export default class SubjectHelperService {
       thread.name[0] != "✅"
     ) {
       thread.setName("✅ " + thread.name);
-      this.interaction.reply({ content: "This thread is now solved!" });
+      this.interaction.editReply({
+        content: "✅ This thread is now solved ✅",
+      });
     } else {
-      // This command only works in threads
+      this.interaction.editReply({
+        content: "❗️ This command only works in threads ❗️",
+      });
+    }
+  }
+  public async handleWhipSlaves() {
+    await this.interaction.deferReply();
+
+    const thread = this.interaction.channel;
+    const channelName = thread.parent.name;
+    const subject = channelName.slice(3);
+    const roleName = subject + "-helper";
+    const role = thread.guild.roles.cache.find(
+      (role) => role.name === roleName
+    );
+    if (
+      thread.type == ChannelType.PublicThread &&
+      thread.parent.type == ChannelType.GuildForum &&
+      thread.parent.parent.name == HELPER_CATEGORY_CHANNEL_NAME
+    ) {
+      this.interaction.editReply({
+        content: `<@&${role.id}>, get to work! 𓀓𓀝`,
+      });
+    } else {
+      this.interaction.editReply({
+        content: "Please don't whip the slaves outside of threads",
+      });
     }
   }
 }
