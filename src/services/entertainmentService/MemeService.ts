@@ -9,6 +9,9 @@ export default class MemeService {
   }
 
   public async getMeme() {
+
+    this.interaction.deferReply();
+
     const response = await fetch("https://meme-api.com/gimme");
 
     if (response.status === 200) {
