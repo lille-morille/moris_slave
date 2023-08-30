@@ -42,3 +42,6 @@ yarn.lock
 
 # ignore package-lock
 package-lock.json
+
+# Vs code counter
+.VSCodeCounter
