@@ -2,10 +2,12 @@ import { CacheType, Interaction } from "discord.js";
 import {
   ADD_HELPER_SUBJECT_COMMAND,
   BECOME_HELPER_COMMAND,
+  MEME_COMMAND,
   REMOVE_HELPER_COMMAND,
   SOLVED_COMMAND,
   WHIP_SLAVES_COMMAND,
 } from "../../constants/commands";
+import MemeService from "../entertainmentService/MemeService";
 import SubjectHelperService from "../subjectHelperService/SubjectHelperService";
 
 /**
@@ -30,6 +32,9 @@ export default async function (interaction: Interaction<CacheType>) {
       break;
     case WHIP_SLAVES_COMMAND:
       helperService.handleWhipSlaves();
+      break;
+    case MEME_COMMAND:
+      MemeService.getMeme();
       break;
     default:
       interaction.reply({ content: "Unknown command", ephemeral: true });
