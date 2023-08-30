@@ -317,4 +317,5 @@ export default class SubjectHelperService {
       throw error;
     }
   }
+  public async handleSolved() {}
 }
