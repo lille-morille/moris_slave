@@ -320,6 +320,7 @@ export default class SubjectHelperService {
     }
   }
   public async handleSolved() {
+    this.interaction.deferReply();
     const thread = this.interaction.channel;
     if (
       thread.type == ChannelType.PublicThread &&
@@ -336,6 +337,7 @@ export default class SubjectHelperService {
     }
   }
   public async handleWhipSlaves() {
+    this.interaction.deferReply();
     const thread = this.interaction.channel;
     const channelName = thread.parent.name;
     const subject = channelName.slice(3);
