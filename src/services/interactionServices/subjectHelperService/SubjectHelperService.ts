@@ -20,6 +20,7 @@ import {
   HELPER_CHANNEL_CATEGORY_NAME,
 } from "../../../constants/channels";
 import { SELECT_HELPER_ROLES_ID } from "../../../constants/inputIds";
+import DatabaseService from "../../database/database";
 import InteractionService from "../InteractionService";
 import helperSchema from "./helperSchema";
 
@@ -48,6 +49,8 @@ export default class SubjectHelperService extends InteractionService {
         subject:
           r.name[0].toUpperCase() + r.name.slice(1).replace("-helper", ""),
       }));
+
+    DatabaseService.addUserSlavePoints(this.interaction.user, 5);
 
     // Create a select for each subject
     const subjectSelect = new StringSelectMenuBuilder({
