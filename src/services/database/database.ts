@@ -54,6 +54,9 @@ class DatabaseService {
         where: {
           id: user.id,
         },
+        select: {
+          slave_points: true,
+        },
       });
 
       return slave_points;
@@ -110,6 +113,26 @@ class DatabaseService {
         throw error;
       }
     }
+  }
+
+  /**
+   * Get the top users with the most slave points
+   * @param amount The amount of users to fetch (ex. 5 for top 5 users)
+   */
+  public async getTopSlavePointsUsers(amount: number): Promise<User[]> {
+    const users = await this.prisma.user.findMany({
+      take: amount,
+      orderBy: {
+        slave_points: "desc",
+      },
+      select: {
+        id: true,
+        user_name: true,
+        slave_points: true,
+      },
+    });
+
+    return users;
   }
 }
 
