@@ -73,7 +73,7 @@ export default class SubjectHelperService extends InteractionService {
       content: "Please select one or more subjects",
     });
 
-    // Setup a collector filter to listen for the user's selection
+    // Set up a collector filter to listen for the user's selection
     const collectorFilter = (i: Interaction) =>
       i.user.id === this.interaction.user.id;
 
@@ -85,7 +85,7 @@ export default class SubjectHelperService extends InteractionService {
           time: 10000,
         });
 
-      this.interaction.deleteReply();
+      await this.interaction.deleteReply();
 
       const selectedRole = helperRoles.find(
         (r) => r.id === selectedSubjects.values[0]
@@ -98,7 +98,7 @@ export default class SubjectHelperService extends InteractionService {
           selectedRole.id
         )
       ) {
-        selectedSubjects.reply({
+        await selectedSubjects.reply({
           content: `You already have the role ${selectedRole.role}! So I won't add it again.`,
           ephemeral: true,
         });
@@ -156,7 +156,7 @@ export default class SubjectHelperService extends InteractionService {
       content: "Please select a role to remove",
     });
 
-    // Setup a collector filter to listen for the user's selection (avoids other users being able to select on their behalf)
+    // Set up a collector filter to listen for the user's selection (avoids other users being able to select on their behalf)
     const collectorFilter = (i: Interaction) =>
       i.user.id === this.interaction.user.id;
 
@@ -168,7 +168,7 @@ export default class SubjectHelperService extends InteractionService {
           time: 10000,
         });
 
-      this.interaction.deleteReply();
+      await this.interaction.deleteReply();
 
       const selectedRole = roles.find(
         (r) => r.value === selectedRoles.values[0]
@@ -187,7 +187,7 @@ export default class SubjectHelperService extends InteractionService {
           ephemeral: true,
         });
       } else {
-        selectedRoles.reply({
+        await selectedRoles.reply({
           content: `You don't have the role ${selectedRole.label}! So I won't remove it.`,
           ephemeral: true,
         });
@@ -197,7 +197,7 @@ export default class SubjectHelperService extends InteractionService {
       console.error(err);
       await this.interaction.deleteReply();
       if (!this.interaction.replied) {
-        this.interaction.reply({
+        await this.interaction.reply({
           content: `Something went wrong, here is the error message: ${err.message}`,
         });
       }
@@ -215,7 +215,7 @@ export default class SubjectHelperService extends InteractionService {
 
     // Make sure the subject does not exist
     if (!(await this.isSubjectNameUnique(name))) {
-      this.interaction.reply({
+      await this.interaction.reply({
         content: "Subject already exists!",
         ephemeral: true,
       });
@@ -321,7 +321,7 @@ export default class SubjectHelperService extends InteractionService {
     }
   }
   public async handleSolved() {
-    this.interaction.deferReply();
+    await this.interaction.deferReply();
     const thread = this.interaction.channel;
     if (
       thread.type == ChannelType.PublicThread &&
@@ -329,12 +329,12 @@ export default class SubjectHelperService extends InteractionService {
       thread.parent.parent.name == HELPER_CATEGORY_CHANNEL_NAME &&
       thread.name[0] != "✅"
     ) {
-      thread.setName("✅ " + thread.name);
-      this.interaction.editReply({
+      await thread.setName("✅ " + thread.name);
+      await this.interaction.editReply({
         content: "✅ This thread is now solved ✅",
       });
     } else {
-      this.interaction.editReply({
+      await this.interaction.editReply({
         content: "❗️ This command only works in threads ❗️",
       });
     }

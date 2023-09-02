@@ -20,22 +20,22 @@ export default async function (interaction: Interaction) {
   const helperService = new SubjectHelperService(interaction);
   switch (interaction.commandName) {
     case ADD_HELPER_SUBJECT_COMMAND:
-      helperService.handleCreateSubject();
+      await helperService.handleCreateSubject();
       break;
     case BECOME_HELPER_COMMAND:
-      helperService.handleBecomeHelper();
+      await helperService.handleBecomeHelper();
       break;
     case REMOVE_HELPER_COMMAND:
-      helperService.handleRemoveHelper();
+      await helperService.handleRemoveHelper();
       break;
     case SOLVED_COMMAND:
-      helperService.handleSolved();
+      await helperService.handleSolved();
       break;
     case MEME_COMMAND:
-      new MemeService(interaction).getMeme();
+      await new MemeService(interaction).getMeme();
       break;
     case WHIP_SLAVES_COMMAND:
-      new SlaveWhipperService(interaction).handleWhipSlaves();
+      await new SlaveWhipperService(interaction).handleWhipSlaves();
       break;
     default:
       await interaction.reply({

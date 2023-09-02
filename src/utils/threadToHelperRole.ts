@@ -4,7 +4,7 @@ import { GuildTextBasedChannel, Role } from "discord.js";
  * Converts a helper thread to its corresponding helper role name
  * @example
  * ```typescript
- * const helperThread = this.interactino.channel;
+ * const helperThread = this.interaction.channel;
  * // channel is '🐍-python', so helper role is 'python helper'
  * const role = threadToHelperRole(helperThread);
  * console.log(role.id) // 23k24jn3280943982nu
@@ -19,8 +19,8 @@ export default function threadToHelperRole(
 
   // Grab the name after the emoji aka. from the third character as each
   // channel starts with an emoji and a hyphen
-  // Example: 📚-matematikk, btw this is safe since we validate
-  // that exacly one emoji is used and the hyphen is standard
+  // Example: 📚-math, btw this is safe since we validate
+  // that exactly one emoji is used and the hyphen is standard
   const subject = channelName.slice(3);
   const roleName = subject + "-helper";
 
