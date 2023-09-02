@@ -10,11 +10,11 @@ export default class SlaveWhipperService extends InteractionService {
     const role = helperThreadToRoleName(thread);
 
     if (isHelperThread) {
-      this.interaction.editReply({
+      await this.interaction.editReply({
         content: `<@&${role.id}>, get to work! 𓀓𓀝`,
       });
     } else {
-      this.interaction.editReply({
+      await this.interaction.editReply({
         content: "Please don't whip the slaves outside of threads",
       });
     }
